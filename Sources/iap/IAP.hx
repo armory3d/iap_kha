@@ -30,29 +30,16 @@ class IAP {
 
 
 	#if (sys_ios ||sys_android_native)
-	@:functionCode('return IAPKore::wasPurchased();')
+	@:functionCode('return IAPKore::getPurchased();')
 	#end
-	public static function wasPurchased():Bool {
+	public static function getPurchased():Bool {
 		return false;
 	}
 
 	#if (sys_ios ||sys_android_native)
-	@:functionCode('IAPKore::purchaseReceived();')
+	@:functionCode('return IAPKore::getError();')
 	#end
-	public static function purchaseReceived():Void {
-	}
-
-
-	#if (sys_ios ||sys_android_native)
-	@:functionCode('return IAPKore::wasError();')
-	#end
-	public static function wasError():Bool {
+	public static function getError():Bool {
 		return false;
-	}
-
-	#if (sys_ios ||sys_android_native)
-	@:functionCode('IAPKore::errorReceived();')
-	#end
-	public static function errorReceived():Void {
 	}
 }

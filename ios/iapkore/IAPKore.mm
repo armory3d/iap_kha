@@ -108,11 +108,11 @@
 }
 
 - (void)purchaseFinished{
-    IAPKore::setPurchased();
+    //IAPKore::purchaseCompleted = true;
 }
 
 - (void)purchaseFailed{
-    IAPKore::setError();
+    //IAPKore::errorCompleted = true;
 }
 
 @end
@@ -121,44 +121,36 @@ namespace IAPKore {
 
 	InAppPurchase* iap;
 
+    bool purchaseCompleted = false;
+    bool errorCompleted = false;
+
 	int init() {
 		iap = [[InAppPurchase alloc] init];
 		return 0;
 	}
 
 	void purchaseProduct(const char* productId) {
-        IAPKore::purchaseReceived();
-        IAPKore::errorReceived();
+        purchaseCompleted = false;
+        errorCompleted = false;
 		NSString *strProductID = [[NSString alloc] initWithUTF8String:productId];
 		[iap purchaseProduct:strProductID];
 	}
 
 	void restore() {
-        IAPKore::purchaseReceived();
-        IAPKore::errorReceived();
+        purchaseCompleted = false;
+        errorCompleted = false;
         [iap restore];
 	}
 
-
-    bool purchaseCompleted = false;
-    bool wasPurchased() {
-        return purchaseCompleted;
-    }
-    void purchaseReceived() {
+    bool getPurchased() {
+        bool result = purchaseCompleted;
         purchaseCompleted = false;
-    }
-    void setPurchased() {
-        purchaseCompleted = true;
+        return result;
     }
 
-    bool errorCompleted = false;
-    bool wasError() {
-        return errorCompleted;
-    }
-    void errorReceived() {
+    bool getError() {
+        bool result = errorCompleted;
         errorCompleted = false;
-    }
-    void setError() {
-        errorCompleted = true;
+        return result;
     }
 }

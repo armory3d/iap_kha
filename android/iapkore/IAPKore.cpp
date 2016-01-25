@@ -1,5 +1,7 @@
 #include <IAPKore.h>
 
+#include <Kore/Android.h>
+
 namespace IAPKore {
 
 	int init() {
@@ -7,33 +9,59 @@ namespace IAPKore {
 	}
 
 	void purchaseProduct(const char* productId) {
-        
+        JNIEnv* env;
+        KoreAndroid::getActivity()->vm->AttachCurrentThread(&env, NULL);
+
+        jclass cls = KoreAndroid::findClass(env, "iapkore.IAPKore");
+
+        jmethodID methodId = env->GetStaticMethodID(cls, "purchaseProduct", "(Ljava/lang/String;)V");
+        jstring jid = env->NewStringUTF(productId);
+
+        env->CallStaticVoidMethod(cls, methodId, jid);
+
+        KoreAndroid::getActivity()->vm->DetachCurrentThread();
 	}
 
 	void restore() {
-        
+        JNIEnv* env;
+        KoreAndroid::getActivity()->vm->AttachCurrentThread(&env, NULL);
+
+        jclass cls = KoreAndroid::findClass(env, "iapkore.IAPKore");
+
+        jmethodID methodId = env->GetStaticMethodID(cls, "restore", "()V");
+
+        env->CallStaticVoidMethod(cls, methodId);
+
+        KoreAndroid::getActivity()->vm->DetachCurrentThread();
 	}
 
+    bool getPurchased() {
+        JNIEnv* env;
+        KoreAndroid::getActivity()->vm->AttachCurrentThread(&env, NULL);
 
-    bool purchaseCompleted = false;
-    bool wasPurchased() {
-        return purchaseCompleted;
-    }
-    void purchaseReceived() {
-        purchaseCompleted = false;
-    }
-    void setPurchased() {
-        purchaseCompleted = true;
+        jclass cls = KoreAndroid::findClass(env, "iapkore.IAPKore");
+
+        jmethodID methodId = env->GetStaticMethodID(cls, "getPurchased", "()Z");
+
+        bool result = env->CallStaticBooleanMethod(cls, methodId);
+
+        KoreAndroid::getActivity()->vm->DetachCurrentThread();
+
+        return result;
     }
 
-    bool errorCompleted = false;
-    bool wasError() {
-        return errorCompleted;
-    }
-    void errorReceived() {
-        errorCompleted = false;
-    }
-    void setError() {
-        errorCompleted = true;
+    bool getError() {
+        JNIEnv* env;
+        KoreAndroid::getActivity()->vm->AttachCurrentThread(&env, NULL);
+
+        jclass cls = KoreAndroid::findClass(env, "iapkore.IAPKore");
+
+        jmethodID methodId = env->GetStaticMethodID(cls, "getError", "()Z");
+
+        bool result = env->CallStaticBooleanMethod(cls, methodId);
+
+        KoreAndroid::getActivity()->vm->DetachCurrentThread();
+
+        return result;
     }
 }

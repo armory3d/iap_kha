@@ -6,11 +6,6 @@ namespace IAPKore {
 	void purchaseProduct(const char* productId);
 	void restore();
 
-	bool wasPurchased();
-	void purchaseReceived();
-	void setPurchased();
-
-	bool wasError();
-	void errorReceived();
-	void setError();
+	bool getPurchased();
+	bool getError();
 }
